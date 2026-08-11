@@ -62,5 +62,18 @@ public class AutoresController : ControllerBase
         return NoContent();
     }
     
+    //controller delete
+     [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var autor = await _context.Autores.FindAsync(id);
+        if (autor == null)
+            return NotFound();
+
+        _context.Autores.Remove(autor);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 
 }
