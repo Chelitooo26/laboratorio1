@@ -15,6 +15,7 @@ public class LibrosController : ControllerBase
         _context = context;
     }
 
+    //controller get
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -32,4 +33,20 @@ public class LibrosController : ControllerBase
 
         return Ok(libro);
     }
+
+    //controller create
+     [HttpPost]
+    public async Task<IActionResult> Create(Libro libro)
+    {
+        var autorExiste = await _context.Autores.AnyAsync(a => a.Id == libro.AutorId);
+        if (!autorExiste)
+            return BadRequest($"No existe un autor con id {libro.AutorId}.");
+
+        _context.Libros.Add(libro);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetById), new { id = libro.Id }, libro);
+    }
+
+    
 }
