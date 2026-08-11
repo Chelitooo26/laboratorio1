@@ -15,6 +15,7 @@ public class AutoresController : ControllerBase
         _context = context;
     }
 
+    //controller get
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {
@@ -32,6 +33,7 @@ public class AutoresController : ControllerBase
         return Ok(autor);
     }
 
+    //controller create
     [HttpPost]
     public async Task<IActionResult> Create(Autor autor)
     {
@@ -41,5 +43,24 @@ public class AutoresController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = autor.Id }, autor);
     }
 
+    //controller update
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, Autor autor)
+    {
+        if (id != autor.Id)
+            return BadRequest("El id no coincide con el id del cuerpo.");
+
+        var existente = await _context.Autores.FindAsync(id);
+        if (existente == null)
+            return NotFound();
+
+        existente.Nombre = autor.Nombre;
+        existente.Nacionalidad = autor.Nacionalidad;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
     
+
 }
