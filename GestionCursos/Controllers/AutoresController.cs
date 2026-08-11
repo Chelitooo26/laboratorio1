@@ -31,4 +31,15 @@ public class AutoresController : ControllerBase
 
         return Ok(autor);
     }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(Autor autor)
+    {
+        _context.Autores.Add(autor);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetById), new { id = autor.Id }, autor);
+    }
+
+    
 }
