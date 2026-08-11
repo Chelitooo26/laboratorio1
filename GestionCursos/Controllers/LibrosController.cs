@@ -48,5 +48,23 @@ public class LibrosController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = libro.Id }, libro);
     }
 
-    
+    //controller update
+     [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, Libro libro)
+    {
+        if (id != libro.Id)
+            return BadRequest("El id de la ruta no coincide con el id del cuerpo.");
+
+        var existente = await _context.Libros.FindAsync(id);
+        if (existente == null)
+            return NotFound();
+
+        existente.Titulo = libro.Titulo;
+        existente.AnioPublicacion = libro.AnioPublicacion;
+        existente.AutorId = libro.AutorId;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
