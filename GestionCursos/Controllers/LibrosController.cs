@@ -67,4 +67,18 @@ public class LibrosController : ControllerBase
 
         return NoContent();
     }
+
+    //controlador delete
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var libro = await _context.Libros.FindAsync(id);
+        if (libro == null)
+            return NotFound();
+
+        _context.Libros.Remove(libro);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
